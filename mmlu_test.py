@@ -29,13 +29,20 @@ def extract_answer_letter(agent_response):
     return None
 
 
-def test_agent_with_mmlu(model="gpt-4o-mini", num_questions=100):
+def test_agent_with_mmlu(model="gpt-4o-mini", num_questions=10):
     # Set up OpenAI API
 
     # Load MMLU dataset from Hugging Face
     dataset = load_dataset("cais/mmlu", "all", cache_dir=".cache")
     mmlu_data = dataset['test']
 
+    # Get all unique question categories from MMLU dataset
+    # categories = set(mmlu_data['subject'])
+    # for c in categories:
+    #     print(c)
+    # print(f"Total number of categories: {len(categories)}")
+    # print("---")
+    
     correct_answers = 0
     total_questions = min(num_questions, len(mmlu_data))
 
