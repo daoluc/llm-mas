@@ -13,13 +13,7 @@ step_back_abstract = """You are working in a group of agents to find the correct
 
 # Decision Prompt
 
-vote_based = """You count the vote for a group solving a multiple choice question. Your task:
-1. Review all agents' final answers, considering only their last stated choice.
-2. Summarize each agent's final vote clearly.
-3. Tally the votes for each option.
-4. Determine the most popular choice. If there's a tie, use your judgment to break it.
-5. Explain your decision-making process.
-6. Conclude with: "The final answer is X" where X is the winning letter choice."""
+vote_based = """You count the vote for a group solving a multiple choice question. Considering only their last stated choice. Tally the votes for each option. Determine the most popular choice. If there's a tie, use your judgment to break it. Conclude with: "The final answer is X" where X is the winning letter choice."""
 
 moderator_decide = """You are the lead of a group solving a multiple choice question. Your task:
 1. Carefully review and summarize the key points from each agent's contribution.

@@ -1,7 +1,25 @@
-from autogen import AssistantAgent, UserProxyAgent, GroupChat, GroupChatManager
+from autogen import AssistantAgent, UserProxyAgent, GroupChat, GroupChatManager, runtime_logging
 import os
 import prompt_store
+import role_store
+import re
+import pandas as pd
+import json
 
+def get_log(dbname="logs.db", table="chat_completions"):
+    import sqlite3
+
+    con = sqlite3.connect(dbname)
+    query = f"SELECT * from {table}"
+    cursor = con.execute(query)
+    rows = cursor.fetchall()
+    column_names = [description[0] for description in cursor.description]
+    data = [dict(zip(column_names, row)) for row in rows]
+    con.close()
+    return data
+
+def str_to_dict(s):
+    return json.loads(s)
 
 
 def create_group_chat(num_debaters, roles, prompt, decision_prompt, debate_rounds=2):
@@ -20,8 +38,8 @@ def create_group_chat(num_debaters, roles, prompt, decision_prompt, debate_round
 
     Raises:
         ValueError: If the number of roles provided doesn't match the number of agents.
-    """
-    
+    """    
+
     # Configure the AI models
     config_list = [
         {
@@ -32,10 +50,13 @@ def create_group_chat(num_debaters, roles, prompt, decision_prompt, debate_round
 
 
     # Create a configuration for the agents
-    agent_config = {"config_list": config_list}
+    agent_config = {
+    	"config_list": config_list,
+    	"cache_seed": None,
+    }
     total_expect_messages = num_debaters * debate_rounds + 2 # Each agent speaks debate_rounds before moderator concludes, the first message is the user input
     if roles is None:
-       roles = [ f"Debater_{i}" for i in range(num_debaters)]
+       roles = [ f"Debater {i}" for i in range(num_debaters)]
     elif len(roles) != num_debaters:
         raise ValueError(f"Number of roles ({len(roles)}) does not match the number of agents ({num_debaters})")   
 
@@ -43,7 +64,7 @@ def create_group_chat(num_debaters, roles, prompt, decision_prompt, debate_round
     agents = []
     for i in range(num_debaters):  # Create debaters
         agents.append(AssistantAgent(
-            name=f"{roles[i]}",
+            name=re.sub(r'[^a-zA-Z0-9_-]', '_', roles[i]),
             system_message=f"You are {roles[i]}. {prompt}",
             llm_config=agent_config
         ))
@@ -76,33 +97,46 @@ def create_group_chat(num_debaters, roles, prompt, decision_prompt, debate_round
 
 # Create a user proxy for interaction
 user_proxy = UserProxyAgent("user_proxy", code_execution_config=False)
-manager = create_group_chat(5, None, prompt_store.step_back_abstract, prompt_store.vote_based)
+manager = create_group_chat(4, None, prompt_store.chain_of_thought, prompt_store.vote_based)
 
 # Example of initiating a debate
-user_proxy.initiate_chat(
-    manager,
-    message="""Let p = (1, 2, 5, 4)(2, 3) in S_5 . Find the index of <p> in S_5.
-
-Options:
-A. 8
-B. 2
-C. 24
-D. 120
-
-Please select the correct answer (A, B, C, or D)."""
-)
-# Correct answer: C
-
 # user_proxy.initiate_chat(
 #     manager,
-#     message="""Statement 1 | A factor group of a non-Abelian group is non-Abelian. Statement 2 | If K is a normal subgroup of H and H is a normal subgroup of G, then K is a normal subgroup of G.
+#     message="""Let p = (1, 2, 5, 4)(2, 3) in S_5 . Find the index of <p> in S_5.
 
 # Options:
-# A. True, True
-# B. False, False
-# C. True, False
-# D. False, True
+# A. 8
+# B. 2
+# C. 24
+# D. 120
 
 # Please select the correct answer (A, B, C, or D)."""
 # )
+# Correct answer: C
+
+logging_session_id = runtime_logging.start(config={"dbname": "logs.db"})
+print("Logging session ID: " + str(logging_session_id))
+
+import time
+
+start_time = time.time()
+
+user_proxy.initiate_chat(
+    manager,
+    message="""Statement 1 | A factor group of a non-Abelian group is non-Abelian. Statement 2 | If K is a normal subgroup of H and H is a normal subgroup of G, then K is a normal subgroup of G.
+
+Options:
+A. True, True
+B. False, False
+C. True, False
+D. False, True
+
+Please select the correct answer (A, B, C, or D)."""
+)
 # Correct answer: B
+
+end_time = time.time()
+runtime = end_time - start_time
+print(f"Runtime of initiate_chat: {runtime:.2f} seconds")
+
+runtime_logging.stop()
