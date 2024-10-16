@@ -1,5 +1,6 @@
 from autogen import AssistantAgent, UserProxyAgent, GroupChat, GroupChatManager
 import os
+import prompt_store
 
 
 
@@ -50,7 +51,7 @@ def create_group_chat(num_debaters, roles, prompt, decision_prompt, debate_round
     # Add moderator as the last agent
     moderator = AssistantAgent(
         name="Moderator",
-        system_message=f"You are the moderator of the group. {decision_prompt} End your message with \"the answer is X\" where X is the correct letter choice.",
+        system_message=f"You are the moderator of the group. {decision_prompt}",
         llm_config=agent_config
     )
     agents.append(moderator)
@@ -75,7 +76,7 @@ def create_group_chat(num_debaters, roles, prompt, decision_prompt, debate_round
 
 # Create a user proxy for interaction
 user_proxy = UserProxyAgent("user_proxy", code_execution_config=False)
-manager = create_group_chat(3)
+manager = create_group_chat(5, None, prompt_store.step_back_abstract, prompt_store.vote_based)
 
 # Example of initiating a debate
 user_proxy.initiate_chat(
@@ -92,16 +93,16 @@ Please select the correct answer (A, B, C, or D)."""
 )
 # Correct answer: C
 
-user_proxy.initiate_chat(
-    manager,
-    message="""Statement 1 | A factor group of a non-Abelian group is non-Abelian. Statement 2 | If K is a normal subgroup of H and H is a normal subgroup of G, then K is a normal subgroup of G.
+# user_proxy.initiate_chat(
+#     manager,
+#     message="""Statement 1 | A factor group of a non-Abelian group is non-Abelian. Statement 2 | If K is a normal subgroup of H and H is a normal subgroup of G, then K is a normal subgroup of G.
 
-Options:
-A. True, True
-B. False, False
-C. True, False
-D. False, True
+# Options:
+# A. True, True
+# B. False, False
+# C. True, False
+# D. False, True
 
-Please select the correct answer (A, B, C, or D)."""
-)
+# Please select the correct answer (A, B, C, or D)."""
+# )
 # Correct answer: B
