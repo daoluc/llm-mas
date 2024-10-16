@@ -114,7 +114,7 @@ manager = create_group_chat(4, None, prompt_store.chain_of_thought, prompt_store
 # )
 # Correct answer: C
 
-logging_session_id = runtime_logging.start(config={"dbname": "logs.db"})
+logging_session_id = runtime_logging.start(logger_type="file", config={"filename": "runtime.log"})
 print("Logging session ID: " + str(logging_session_id))
 
 import time
@@ -123,6 +123,7 @@ start_time = time.time()
 
 user_proxy.initiate_chat(
     manager,
+    silent=True,
     message="""Statement 1 | A factor group of a non-Abelian group is non-Abelian. Statement 2 | If K is a normal subgroup of H and H is a normal subgroup of G, then K is a normal subgroup of G.
 
 Options:
