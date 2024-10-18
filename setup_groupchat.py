@@ -1,6 +1,7 @@
 from autogen import AssistantAgent, GroupChat, GroupChatManager
 import os
 import re
+from utils import calculate_tokens
 
 def create_group_chat(num_debaters, roles, prompt, decision_prompt, debate_rounds=2):
     """

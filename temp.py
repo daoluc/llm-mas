@@ -29,12 +29,11 @@ response = requests.post(url, json=payload)
 # Check if the request was successful
 if response.status_code == 200:
     result = response.json()
-    print("Chat group created and message sent successfully")
-    print(f"Runtime: {result['runtime']}")
-    print(f"Completion tokens: {result['completion_tokens']}")
-    print(f"Prompt tokens: {result['prompt_tokens']}")
     print(f"Messages: {result['messages']}")
-    print(f"Logname: {result['logname']}")
+    print(f"Runtime: {result['runtime']}")
+    # print(f"Completion tokens: {result['completion_tokens']}")
+    # print(f"Prompt tokens: {result['prompt_tokens']}")    
+    # print(f"Logname: {result['logname']}")
 else:
     print(f"Error: {response.status_code}")
     print(response.text)

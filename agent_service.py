@@ -23,8 +23,8 @@ async def request_groupchat(request: ChatRequest):
         start_time = time.time()
         
         # Start logging        
-        logname = f"runtime_{uuid.uuid4()}.log"
-        logging_session_id = runtime_logging.start(logger_type="file", config={"filename": logname})
+        # logname = f"runtime_{uuid.uuid4()}.log"
+        # logging_session_id = runtime_logging.start(logger_type="file", config={"filename": logname})
         
         # Create the group chat
         chat_manager = create_group_chat(
@@ -45,7 +45,7 @@ async def request_groupchat(request: ChatRequest):
         )
         
         # Stop logging
-        runtime_logging.stop()
+        # runtime_logging.stop()
         
         # Calculate runtime
         end_time = time.time()
@@ -53,32 +53,32 @@ async def request_groupchat(request: ChatRequest):
         
         conversation_history = chat_manager.groupchat.messages
         
-        # Get token usage and session ID from the log
-        # Read the log file
-        with open("autogen_logs/"+logname, 'r') as log_file:
-            log_content = log_file.read()
+        # # Get token usage and session ID from the log
+        # # Read the log file
+        # with open("autogen_logs/"+logname, 'r') as log_file:
+        #     log_content = log_file.read()
         
-        # Extract all total_tokens values using regex        
-        # token_matches = re.findall(r'total_tokens=(\d+)', log_content)
-        completion_tokens_matches = re.findall(r'completion_tokens=(\d+)', log_content)
-        prompt_tokens_matches = re.findall(r'prompt_tokens=(\d+)', log_content)
+        # # Extract all total_tokens values using regex        
+        # # token_matches = re.findall(r'total_tokens=(\d+)', log_content)
+        # completion_tokens_matches = re.findall(r'completion_tokens=(\d+)', log_content)
+        # prompt_tokens_matches = re.findall(r'prompt_tokens=(\d+)', log_content)
         
-        # Convert matches to integers and sum them
-        # total_tokens = sum(map(int, token_matches))
-        completion_tokens = sum(map(int, completion_tokens_matches))
-        prompt_tokens = sum(map(int, prompt_tokens_matches))
+        # # Convert matches to integers and sum them
+        # # total_tokens = sum(map(int, token_matches))
+        # completion_tokens = sum(map(int, completion_tokens_matches))
+        # prompt_tokens = sum(map(int, prompt_tokens_matches))
         
         # Clean up the log file
         # import os
         # os.remove(logname)
         
         return {            
-            "runtime": f"{runtime:.2f} seconds",
-            "completion_tokens": completion_tokens,
-            "prompt_tokens": prompt_tokens,
+            "runtime": f"{runtime:.2f}",
+            # "completion_tokens": completion_tokens,
+            # "prompt_tokens": prompt_tokens,
             "messages": conversation_history,
-            "session_id": logging_session_id,
-            "logname": logname
+            # "session_id": logging_session_id,
+            # "logname": logname
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
