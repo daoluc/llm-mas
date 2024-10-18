@@ -57,10 +57,14 @@ async def request_groupchat(request: ChatRequest):
             log_content = log_file.read()
         
         # Extract all total_tokens values using regex        
-        token_matches = re.findall(r'total_tokens=(\d+)', log_content)
+        # token_matches = re.findall(r'total_tokens=(\d+)', log_content)
+        completion_tokens_matches = re.findall(r'completion_tokens=(\d+)', log_content)
+        prompt_tokens_matches = re.findall(r'prompt_tokens=(\d+)', log_content)
         
         # Convert matches to integers and sum them
-        total_tokens = sum(map(int, token_matches))
+        # total_tokens = sum(map(int, token_matches))
+        completion_tokens = sum(map(int, completion_tokens_matches))
+        prompt_tokens = sum(map(int, prompt_tokens_matches))
         
         # Clean up the log file
         # import os
@@ -69,7 +73,8 @@ async def request_groupchat(request: ChatRequest):
         return {
             "message": "Chat group created and message sent successfully",
             "runtime": f"{runtime:.2f} seconds",
-            "total_tokens": total_tokens,
+            "completion_tokens": completion_tokens,
+            "prompt_tokens": prompt_tokens,
             "last_message": last_message,
             "session_id": logging_session_id,
             "logname": logname
