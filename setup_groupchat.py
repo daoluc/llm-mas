@@ -1,26 +1,6 @@
-from autogen import AssistantAgent, UserProxyAgent, GroupChat, GroupChatManager, runtime_logging
+from autogen import AssistantAgent, GroupChat, GroupChatManager
 import os
-import prompt_store
-import role_store
 import re
-import pandas as pd
-import json
-
-def get_log(dbname="logs.db", table="chat_completions"):
-    import sqlite3
-
-    con = sqlite3.connect(dbname)
-    query = f"SELECT * from {table}"
-    cursor = con.execute(query)
-    rows = cursor.fetchall()
-    column_names = [description[0] for description in cursor.description]
-    data = [dict(zip(column_names, row)) for row in rows]
-    con.close()
-    return data
-
-def str_to_dict(s):
-    return json.loads(s)
-
 
 def create_group_chat(num_debaters, roles, prompt, decision_prompt, debate_rounds=2):
     """
@@ -94,50 +74,3 @@ def create_group_chat(num_debaters, roles, prompt, decision_prompt, debate_round
 
     # Create and return the group chat manager
     return GroupChatManager(groupchat=groupchat, llm_config=agent_config)
-
-# Create a user proxy for interaction
-user_proxy = UserProxyAgent("user_proxy", code_execution_config=False)
-manager = create_group_chat(4, None, prompt_store.chain_of_thought, prompt_store.vote_based)
-
-# Example of initiating a debate
-# user_proxy.initiate_chat(
-#     manager,
-#     message="""Let p = (1, 2, 5, 4)(2, 3) in S_5 . Find the index of <p> in S_5.
-
-# Options:
-# A. 8
-# B. 2
-# C. 24
-# D. 120
-
-# Please select the correct answer (A, B, C, or D)."""
-# )
-# Correct answer: C
-
-logging_session_id = runtime_logging.start(logger_type="file", config={"filename": "runtime.log"})
-print("Logging session ID: " + str(logging_session_id))
-
-import time
-
-start_time = time.time()
-
-user_proxy.initiate_chat(
-    manager,
-    silent=True,
-    message="""Statement 1 | A factor group of a non-Abelian group is non-Abelian. Statement 2 | If K is a normal subgroup of H and H is a normal subgroup of G, then K is a normal subgroup of G.
-
-Options:
-A. True, True
-B. False, False
-C. True, False
-D. False, True
-
-Please select the correct answer (A, B, C, or D)."""
-)
-# Correct answer: B
-
-end_time = time.time()
-runtime = end_time - start_time
-print(f"Runtime of initiate_chat: {runtime:.2f} seconds")
-
-runtime_logging.stop()

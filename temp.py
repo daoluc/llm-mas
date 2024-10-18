@@ -1,64 +1,39 @@
-import autogen
-import os
-from dotenv import load_dotenv
+import requests
+import prompt_store
+import role_store
 
-# Load environment variables from .env file
-load_dotenv()
+# Define the API endpoint
+url = "http://localhost:8000/request_groupchat"  # Adjust the URL if needed
 
-# Configure the AI models
-config_list = [
-    {
-        "model": "gpt-4-mini",
-        "api_key": os.getenv("OPENAI_API_KEY")
-    }
-]
+# Prepare the request payload
+payload = {
+    "num_debaters": 2,
+    "roles": role_store.role_2,
+    "prompt": prompt_store.chain_of_thought,
+    "decision_prompt": prompt_store.vote_based,
+    "debate_rounds": 2,
+    "message": """Statement 1 | A factor group of a non-Abelian group is non-Abelian. Statement 2 | If K is a normal subgroup of H and H is a normal subgroup of G, then K is a normal subgroup of G.
 
-llm_config = {
-    "request_timeout": 600,
-    "seed": 42,
-    "config_list": config_list,
-    "temperature": 0
+Options:
+A. True, True
+B. False, False
+C. True, False
+D. False, True
+
+Please select the correct answer (A, B, C, or D)."""
 }
 
-# Create assistant agents
-assistant = autogen.AssistantAgent(
-    name="Assistant",
-    llm_config=llm_config,
-    system_message="You are a helpful AI assistant."
-)
+# Send the POST request
+response = requests.post(url, json=payload)
 
-coder = autogen.AssistantAgent(
-    name="Coder",
-    llm_config=llm_config,
-    system_message="You are an AI specialized in writing Python code."
-)
-
-# Create a human proxy agent
-human_proxy = autogen.UserProxyAgent(
-    name="Human",
-    human_input_mode="TERMINATE",
-    max_consecutive_auto_reply=10,
-    is_termination_msg=lambda x: x.get("content", "").rstrip().endswith("TERMINATE"),
-    code_execution_config={"work_dir": "coding"},
-    llm_config=llm_config,
-    system_message="You are a human user interacting with AI agents."
-)
-
-# Create a group chat
-groupchat = autogen.GroupChat(
-    agents=[human_proxy, assistant, coder],
-    messages=[],
-    max_round=50
-)
-
-# Create a group chat manager
-manager = autogen.GroupChatManager(
-    groupchat=groupchat,
-    llm_config=llm_config
-)
-
-# Start the conversation
-human_proxy.initiate_chat(
-    manager,
-    message="Let's work on a Python project to create a simple web scraper."
-)
+# Check if the request was successful
+if response.status_code == 200:
+    result = response.json()
+    print("Chat group created and message sent successfully")
+    print(f"Runtime: {result['runtime']}")
+    print(f"Total tokens used: {result['total_tokens']}")
+    print(f"Last message: {result['last_message']}")
+    print(f"Logname: {result['logname']}")
+else:
+    print(f"Error: {response.status_code}")
+    print(response.text)
