@@ -1,3 +1,9 @@
-openai==0.28.1
+autogen_agentchat==0.2.36
+datasets==3.0.1
+fastapi==0.115.2
+openai==1.52.0
+pydantic==2.9.2
 python-dotenv==1.0.1
-tqdm==4.66.1
+Requests==2.32.3
+swarm==0.1.0
+tqdm==4.66.5

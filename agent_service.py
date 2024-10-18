@@ -39,7 +39,7 @@ async def request_groupchat(request: ChatRequest):
         user_proxy = UserProxyAgent("user_proxy", code_execution_config=False)
         
         # Send the message to the group and get the last message
-        last_message = user_proxy.initiate_chat(
+        user_proxy.initiate_chat(
             chat_manager,
             message=request.message
         )
@@ -50,6 +50,8 @@ async def request_groupchat(request: ChatRequest):
         # Calculate runtime
         end_time = time.time()
         runtime = end_time - start_time
+        
+        conversation_history = chat_manager.groupchat.messages
         
         # Get token usage and session ID from the log
         # Read the log file
@@ -70,12 +72,11 @@ async def request_groupchat(request: ChatRequest):
         # import os
         # os.remove(logname)
         
-        return {
-            "message": "Chat group created and message sent successfully",
+        return {            
             "runtime": f"{runtime:.2f} seconds",
             "completion_tokens": completion_tokens,
             "prompt_tokens": prompt_tokens,
-            "last_message": last_message,
+            "messages": conversation_history,
             "session_id": logging_session_id,
             "logname": logname
         }

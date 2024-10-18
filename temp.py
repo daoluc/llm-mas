@@ -8,7 +8,7 @@ url = "http://localhost:8000/request_groupchat"  # Adjust the URL if needed
 # Prepare the request payload
 payload = {
     "num_debaters": 2,
-    "roles": role_store.role_2,
+    "roles": None,
     "prompt": prompt_store.chain_of_thought,
     "decision_prompt": prompt_store.vote_based,
     "debate_rounds": 2,
@@ -31,8 +31,9 @@ if response.status_code == 200:
     result = response.json()
     print("Chat group created and message sent successfully")
     print(f"Runtime: {result['runtime']}")
-    print(f"Total tokens used: {result['total_tokens']}")
-    print(f"Last message: {result['last_message']}")
+    print(f"Completion tokens: {result['completion_tokens']}")
+    print(f"Prompt tokens: {result['prompt_tokens']}")
+    print(f"Messages: {result['messages']}")
     print(f"Logname: {result['logname']}")
 else:
     print(f"Error: {response.status_code}")

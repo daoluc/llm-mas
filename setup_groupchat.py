@@ -28,11 +28,10 @@ def create_group_chat(num_debaters, roles, prompt, decision_prompt, debate_round
         }
     ]
 
-
     # Create a configuration for the agents
     agent_config = {
-    	"config_list": config_list,
-    	"cache_seed": None,
+        "config_list": config_list,
+        "cache_seed": None,
     }
     total_expect_messages = num_debaters * debate_rounds + 2 # Each agent speaks debate_rounds before moderator concludes, the first message is the user input
     if roles is None:
@@ -69,8 +68,8 @@ def create_group_chat(num_debaters, roles, prompt, decision_prompt, debate_round
         agents=agents,
         messages=[],
         max_round=total_expect_messages,  
-        speaker_selection_method=custom_speaker_selection
+        speaker_selection_method=custom_speaker_selection        
     )
 
     # Create and return the group chat manager
-    return GroupChatManager(groupchat=groupchat, llm_config=agent_config)
+    return GroupChatManager(groupchat=groupchat, llm_config=agent_config, silent=True)
