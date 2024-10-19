@@ -9,8 +9,7 @@ def run_group_chat(
     num_debaters,
     prompt,
     decision_prompt,
-    roles = None,        
-    debate_rounds = 2,    
+    roles = None,
 ):
     try:
         start_time = time.time()
@@ -20,8 +19,7 @@ def run_group_chat(
             num_debaters,
             roles,
             prompt,
-            decision_prompt,
-            debate_rounds
+            decision_prompt
         )
         
         # Create a user proxy for interaction
