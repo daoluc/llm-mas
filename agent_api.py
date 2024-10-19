@@ -38,7 +38,8 @@ async def request_groupchat(request: ChatRequest):
         # Send the message to the group and get the last message
         user_proxy.initiate_chat(
             chat_manager,
-            message=request.message
+            message=request.message,
+            silent=True
         )
         
         # Calculate runtime
