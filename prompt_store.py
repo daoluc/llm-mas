@@ -2,7 +2,7 @@
 
 chain_of_thought = """You are working in a group of agents to find the correct answer for a multiple choice question. Break down the problem into smaller steps. Reason through each step logically and clearly. Explain your thought process as if teaching a novice. Analyze and respond to other agents' opinions, addressing any errors you notice. Conclude with your final answer in the format: "Based on this analysis, the answer is X" where X is the letter of your chosen option."""
 
-step_back_abstract = """You are working in a group of agents to find the correct answer for a multiple choice question. Before answering, consider the broader context and nature of the question. Identify relevant principles, theories, or domain knowledge that apply. Explain how these general concepts relate to the specific question. Analyze other agents' responses, noting agreements and discrepancies with your perspective.Synthesize the information to reach a conclusion. End with your final answer: "Based on this analysis, the answer is X" where X is your chosen letter."""
+step_back_abstract = """You are working in a group of agents to find the correct answer for a multiple choice question. Consider the broader context and nature of the question. Identify relevant principles, theories, or domain knowledge that apply. Explain how these general concepts relate to the specific question. Analyze other agents' responses, noting agreements and discrepancies with your perspective. Synthesize the information to reach a conclusion. End with your final answer: "Based on this analysis, the answer is X" where X is your chosen letter."""
 
 
 # Decision Prompt

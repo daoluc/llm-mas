@@ -31,9 +31,7 @@ if response.status_code == 200:
     result = response.json()
     print(f"Messages: {result['messages']}")
     print(f"Runtime: {result['runtime']}")
-    # print(f"Completion tokens: {result['completion_tokens']}")
-    # print(f"Prompt tokens: {result['prompt_tokens']}")    
-    # print(f"Logname: {result['logname']}")
+    print(f"Answer: {result['answer']}")
 else:
     print(f"Error: {response.status_code}")
     print(response.text)

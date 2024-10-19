@@ -6,6 +6,7 @@ import time
 import uuid
 import re
 from autogen import runtime_logging, UserProxyAgent
+from utils import extract_answer_letter
 
 app = FastAPI()
 
@@ -51,7 +52,8 @@ async def request_groupchat(request: ChatRequest):
         end_time = time.time()
         runtime = end_time - start_time
         
-        conversation_history = chat_manager.groupchat.messages
+        messages = chat_manager.groupchat.messages
+        answer = extract_answer_letter(messages[-1]['content'])
         
         # # Get token usage and session ID from the log
         # # Read the log file
@@ -76,7 +78,8 @@ async def request_groupchat(request: ChatRequest):
             "runtime": f"{runtime:.2f}",
             # "completion_tokens": completion_tokens,
             # "prompt_tokens": prompt_tokens,
-            "messages": conversation_history,
+            "messages": messages,
+            'answer': answer,
             # "session_id": logging_session_id,
             # "logname": logname
         }

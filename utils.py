@@ -1,4 +1,5 @@
 import tiktoken
+import re
 
 def extract_answer_letter(agent_response):
     # Convert the response to lowercase for case-insensitive matching
@@ -59,30 +60,17 @@ def calculate_groupchat_tokens(messages):
     
     return total_tokens
 
-
-import yaml
-from typing import List, Dict
-
-def load_and_calculate_tokens() -> int:
-    try:
-        # Load the sample messages from the file
-        with open('samplemessages.txt', 'r') as file:
-            sample_messages: List[Dict[str, str]] = yaml.safe_load(file)
-        
-        # Calculate the tokens for the loaded messages
-        total_tokens = calculate_groupchat_tokens(sample_messages)
-        
-        return total_tokens
-    except yaml.YAMLError as e:
-        print(f"Error parsing YAML: {e}")
-        print("Please ensure your samplemessages.yaml file contains valid YAML.")
-        return None
-    except FileNotFoundError:
-        print("samplemessages.yaml file not found.")
-        return None
-
-# Example usage
-if __name__ == "__main__":
-    token_count = load_and_calculate_tokens()
-    if token_count is not None:
-        print(f"Total tokens in sample messages: {token_count}")
+def extract_answer_letter(agent_response):    
+    # Remove special characters from the response
+    response_clean = re.sub(r'[^a-zA-Z0-9\s]', '', agent_response).lower()
+    
+    # Find the index of "answer is "
+    index = response_clean.rfind("answer is ")
+    
+    if index != -1:
+        # Get the first character after "answer is "
+        answer_letter = response_clean[index + 10].upper()                
+        return answer_letter
+    
+    # Return None if no valid answer letter is found
+    return None
