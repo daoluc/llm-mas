@@ -34,7 +34,7 @@ def process_item(ga: GroupArchitecture, item):
     try:
         print(f"PROCESSING: {str(ga)} {item['question']}")
         if ga.topology == Topology.SINGLE:
-            result = run_single_agent(message, get_agent_prompt(ga.prompt_type))
+            result = run_single_agent(message, get_agent_prompt(ga.prompt_type, 1)[0])
         elif ga.topology == Topology.GROUP_CHAT:
             result = run_group_chat(
                 message=message,
