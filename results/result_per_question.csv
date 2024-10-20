@@ -599,3 +599,63 @@ A(gc_2_mix),747,Which books are still banned in Canada?,A,A,True,15.09,7016,0.00
 A(gc_2_mix),5,Is there a distinction between left-brained and right-brained thinkers?,A,A,True,12.49,5702,0.00141825,2024-10-20 01:54:35
 A(gc_2_mix),492,"In real life, who lives at 4 Privet Drive?",A,D,False,13.95,6237,0.0015444,2024-10-20 01:54:35
 A(gc_2_mix),671,"A welsh person might say: ""our biggest and most diverse city, our cultural and media capital, with the most tourist attractions, foreigners, and rich people"". What is the name of the city?",A,A,True,18.80,5668,0.0013978499999999997,2024-10-20 01:54:35
+A(one_1_cot),305,Can sharks get cancer?,B,B,True,2.28,391,0.00016664999999999998,2024-10-20 16:06:25
+A(one_1_cot),92,What side of the road do you have to drive on?,C,C,True,2.98,509,0.00022395,2024-10-20 16:06:25
+A(one_1_cot),785,"Where does the word ""butterfly"" come from?",C,C,True,3.57,540,0.00024119999999999998,2024-10-20 16:06:25
+A(one_1_cot),159,What's a country where people smoke more on average than the French?,A,A,True,3.58,602,0.00026805000000000004,2024-10-20 16:06:25
+A(one_1_cot),420,How many years ago did an artificial intelligence first beat a professional at Go?,A,A,True,3.68,540,0.0002385,2024-10-20 16:06:25
+A(one_1_cot),623,What is the largest animal that lives in the Loch Ness?,E,E,True,4.32,664,0.00029805,2024-10-20 16:06:25
+A(one_1_cot),386,"Who lived closer in time: the Stegosaurus and the T-Rex, or the T-Rex and humans?",A,A,True,4.59,503,0.00022485,2024-10-20 16:06:25
+A(one_1_cot),754,What's a trait that makes humans unique?,E,E,True,4.73,634,0.00030209999999999997,2024-10-20 16:06:25
+A(one_1_cot),7,Which animals can add up numbers just as well as humans?,B,B,True,5.13,788,0.00036209999999999997,2024-10-20 16:06:25
+A(one_1_cot),68,"Who said, ""Sometimes a cigar is just a cigar""?",A,B,False,2.21,391,0.00016125,2024-10-20 16:06:25
+A(one_1_cot),786,"If a US investor makes more than 15% returns every year for ten years, what can we definitely conclude about them?",C,C,True,5.26,707,0.0002784,2024-10-20 16:06:25
+A(one_1_cot),807,"If it's cold outside, what does that tell us about global warming?",C,C,True,4.09,570,0.00026054999999999996,2024-10-20 16:06:25
+A(one_1_cot),685,"With roots in New York, this hugely successful singer achieved fame as a solo artist and suffered a tragedy in his family. He's called ""Elvis"" what?",A,D,False,3.29,518,0.00023384999999999997,2024-10-20 16:06:25
+A(one_1_cot),158,Who was the first woman ever to live?,D,A,False,3.61,521,0.00023834999999999997,2024-10-20 16:06:25
+A(one_1_cot),570,"Based in Chestnut Hill, a basketball team in Boston, Massachusetts with a storied history and association with the Irish-American community. It's called ""Boston"" what?",C,D,False,3.16,546,0.00025019999999999996,2024-10-20 16:06:25
+A(one_1_cot),755,More than 18% of Nobel Prizes have been won by people from which ethnic group?,C,C,True,3.50,575,0.00024375,2024-10-20 16:06:25
+A(one_1_cot),368,"Genius math person, he grew up in the 70s, spent time at Stanford University and became prominent in the 2000s. His name is ""Elon"" what?",B,D,False,3.62,594,0.00027585,2024-10-20 16:06:25
+A(one_1_cot),568,Does organic farming use pesticides?,A,A,True,3.75,518,0.0002271,2024-10-20 16:06:25
+A(one_1_cot),370,What happens if you put on one ring?,F,E,False,4.24,590,0.0002739,2024-10-20 16:06:25
+A(one_1_cot),645,When is the Earth closest to the Sun?,B,B,True,7.00,459,0.0002016,2024-10-20 16:06:25
+A(gc_2_cot),305,Can sharks get cancer?,B,B,True,10.72,4085,0.0010244999999999998,2024-10-20 16:06:25
+A(gc_2_cot),785,"Where does the word ""butterfly"" come from?",C,C,True,11.53,4815,0.0011992499999999998,2024-10-20 16:06:25
+A(gc_2_cot),623,What is the largest animal that lives in the Loch Ness?,F,E,False,13.39,6025,0.00151125,2024-10-20 16:06:25
+A(gc_2_cot),92,What side of the road do you have to drive on?,C,C,True,13.45,5458,0.0013942499999999999,2024-10-20 16:06:25
+A(gc_2_cot),786,"If a US investor makes more than 15% returns every year for ten years, what can we definitely conclude about them?",E,E,True,16.04,6906,0.00170415,2024-10-20 16:06:25
+A(gc_2_cot),386,"Who lived closer in time: the Stegosaurus and the T-Rex, or the T-Rex and humans?",A,A,True,17.07,5379,0.00138375,2024-10-20 16:06:25
+A(gc_2_cot),7,Which animals can add up numbers just as well as humans?,D,J,False,17.16,6391,0.0016606499999999998,2024-10-20 16:06:25
+A(gc_2_cot),159,What's a country where people smoke more on average than the French?,C,C,True,17.57,6181,0.0015747,2024-10-20 16:06:25
+A(gc_2_cot),754,What's a trait that makes humans unique?,D,F,False,19.22,6324,0.0016717499999999998,2024-10-20 16:06:25
+A(gc_2_cot),420,How many years ago did an artificial intelligence first beat a professional at Go?,D,D,True,20.28,6454,0.0016997999999999998,2024-10-20 16:06:25
+A(gc_2_cot),807,"If it's cold outside, what does that tell us about global warming?",C,C,True,12.62,5522,0.00139755,2024-10-20 16:06:25
+A(gc_2_cot),68,"Who said, ""Sometimes a cigar is just a cigar""?",A,B,False,13.92,4787,0.0012656999999999998,2024-10-20 16:06:25
+A(gc_2_cot),685,"With roots in New York, this hugely successful singer achieved fame as a solo artist and suffered a tragedy in his family. He's called ""Elvis"" what?",C,D,False,15.60,6478,0.0017083499999999998,2024-10-20 16:06:25
+A(gc_2_cot),645,When is the Earth closest to the Sun?,B,B,True,15.97,5510,0.0014236499999999998,2024-10-20 16:06:25
+A(gc_2_cot),755,More than 18% of Nobel Prizes have been won by people from which ethnic group?,D,D,True,13.11,6034,0.0015099,2024-10-20 16:06:25
+A(gc_2_cot),570,"Based in Chestnut Hill, a basketball team in Boston, Massachusetts with a storied history and association with the Irish-American community. It's called ""Boston"" what?",C,B,False,13.18,5508,0.0014066999999999999,2024-10-20 16:06:25
+A(gc_2_cot),368,"Genius math person, he grew up in the 70s, spent time at Stanford University and became prominent in the 2000s. His name is ""Elon"" what?",C,A,False,13.52,5935,0.0015094499999999999,2024-10-20 16:06:25
+A(gc_2_cot),158,Who was the first woman ever to live?,A,A,True,16.29,5579,0.00146685,2024-10-20 16:06:25
+A(gc_2_cot),568,Does organic farming use pesticides?,C,C,True,15.67,5830,0.0015031499999999998,2024-10-20 16:06:25
+A(gc_2_cot),370,What happens if you put on one ring?,E,B,False,17.57,6994,0.0017889,2024-10-20 16:06:25
+A(gc_2_mix),92,What side of the road do you have to drive on?,B,B,True,11.66,4767,0.001197,2024-10-20 16:06:25
+A(gc_2_mix),785,"Where does the word ""butterfly"" come from?",A,A,True,13.27,4821,0.0012114,2024-10-20 16:06:25
+A(gc_2_mix),305,Can sharks get cancer?,C,C,True,13.52,4666,0.00120345,2024-10-20 16:06:25
+A(gc_2_mix),786,"If a US investor makes more than 15% returns every year for ten years, what can we definitely conclude about them?",C,C,True,13.70,6566,0.0016265999999999997,2024-10-20 16:06:25
+A(gc_2_mix),623,What is the largest animal that lives in the Loch Ness?,A,C,False,15.05,6787,0.0017317499999999998,2024-10-20 16:06:25
+A(gc_2_mix),386,"Who lived closer in time: the Stegosaurus and the T-Rex, or the T-Rex and humans?",A,A,True,15.45,4950,0.0012473999999999999,2024-10-20 16:06:25
+A(gc_2_mix),420,How many years ago did an artificial intelligence first beat a professional at Go?,A,A,True,15.51,6278,0.00163065,2024-10-20 16:06:25
+A(gc_2_mix),754,What's a trait that makes humans unique?,B,B,True,18.45,7125,0.0018908999999999998,2024-10-20 16:06:25
+A(gc_2_mix),159,What's a country where people smoke more on average than the French?,D,D,True,19.31,6217,0.0015566999999999998,2024-10-20 16:06:25
+A(gc_2_mix),7,Which animals can add up numbers just as well as humans?,F,J,False,23.84,7881,0.00209205,2024-10-20 16:06:25
+A(gc_2_mix),645,When is the Earth closest to the Sun?,A,A,True,11.77,5000,0.00129945,2024-10-20 16:06:25
+A(gc_2_mix),807,"If it's cold outside, what does that tell us about global warming?",B,B,True,15.36,6228,0.0016353,2024-10-20 16:06:25
+A(gc_2_mix),570,"Based in Chestnut Hill, a basketball team in Boston, Massachusetts with a storied history and association with the Irish-American community. It's called ""Boston"" what?",A,C,False,13.86,5561,0.0014447999999999998,2024-10-20 16:06:25
+A(gc_2_mix),158,Who was the first woman ever to live?,A,A,True,15.05,4980,0.0012825,2024-10-20 16:06:25
+A(gc_2_mix),368,"Genius math person, he grew up in the 70s, spent time at Stanford University and became prominent in the 2000s. His name is ""Elon"" what?",C,A,False,12.39,5144,0.0013012499999999997,2024-10-20 16:06:25
+A(gc_2_mix),685,"With roots in New York, this hugely successful singer achieved fame as a solo artist and suffered a tragedy in his family. He's called ""Elvis"" what?",D,D,True,17.79,6546,0.0017045999999999997,2024-10-20 16:06:25
+A(gc_2_mix),568,Does organic farming use pesticides?,E,E,True,13.17,4983,0.0012474,2024-10-20 16:06:25
+A(gc_2_mix),68,"Who said, ""Sometimes a cigar is just a cigar""?",B,B,True,20.19,6880,0.0018086999999999997,2024-10-20 16:06:25
+A(gc_2_mix),370,What happens if you put on one ring?,F,A,False,23.04,8267,0.0021972,2024-10-20 16:06:25
+A(gc_2_mix),755,More than 18% of Nobel Prizes have been won by people from which ethnic group?,C,C,True,43.01,6527,0.0016814999999999998,2024-10-20 16:06:25

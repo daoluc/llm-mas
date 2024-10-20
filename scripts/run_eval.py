@@ -27,9 +27,17 @@ def load_truthfulqa_mc1():
 def process_item(ga: GroupArchitecture, item):
     question = item['question']
     options = item['mc1_targets']['choices']
-    correct_answer = chr(65 + item['mc1_targets']['labels'].index(1))
+    correct_index = item['mc1_targets']['labels'].index(1)
+    
+    # Randomize the order of options
+    shuffled_indices = list(range(len(options)))
+    random.shuffle(shuffled_indices)
+    
+    shuffled_options = [options[i] for i in shuffled_indices]
+    new_correct_index = shuffled_indices.index(correct_index)
+    correct_answer = chr(65 + new_correct_index)
 
-    message = f"{question}\n\nOptions:\n" + "\n".join([f"{chr(65+i)}. {opt}" for i, opt in enumerate(options)]) + "\n\nPlease select the correct option letter (A, B, C, etc.)."
+    message = f"{question}\n\nOptions:\n" + "\n".join([f"{chr(65+i)}. {opt}" for i, opt in enumerate(shuffled_options)]) + "\n\nPlease select the correct option letter (A, B, C, etc.)."
 
     try:
         print(f"PROCESSING: {str(ga)} {item['question']}")
@@ -157,7 +165,7 @@ def main():
     print(f"RUN ROUND {current_datetime}")
         
     dataset = load_truthfulqa_mc1()
-    dataset = dataset.select(random.sample(range(len(dataset)), 100))
+    dataset = dataset.select(random.sample(range(len(dataset)), 20))    
     
     ga = GroupArchitecture(Topology.SINGLE, 1, PromptType.CHAIN_OF_THOUGHT)
     accuracy = run_evaluation(ga, dataset, current_datetime, n_threads=10)
