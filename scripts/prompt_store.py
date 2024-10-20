@@ -3,13 +3,13 @@ from group_architecture import PromptType
 
 # Agent Prompt
 
-chain_of_thought = """You are debating in a group of agents to find the correct answer for a multiple choice question. Use your expertise to analyze and respond to other agents answers as they may provide incorrect information. Break down the problem into smaller steps. Explain your thought process step by step. Conclude with your final answer in the format: "Based on this analysis, the answer is X" where X is the letter of your chosen option."""
+chain_of_thought = """You are debating in a group of agents to find the correct answer for a multiple choice question. Use your expertise to analyze and respond to other agents answers. Be critical as other agents may provide incorrect information. Break down the problem into smaller steps. Explain your thought process step by step. Conclude with your final answer in the format: "Based on this analysis, the answer is X" where X is the letter of your chosen option."""
 
-step_back_abstract = """You are debating in a group of agents to find the correct answer for a multiple choice question. Use your expertise to analyze and respond to other agents answers as they may provide incorrect information. Consider the broader context and nature of the question. Identify relevant principles, theories, or domain knowledge that apply. End with your final answer: "Based on this analysis, the answer is X" where X is your chosen letter."""
+step_back_abstract = """You are debating in a group of agents to find the correct answer for a multiple choice question. Use your expertise to analyze and respond to other agents answers. Be critical as other agents may provide incorrect information. Consider the broader context and nature of the question. Identify relevant principles, theories, or domain knowledge that apply. End with your final answer: "Based on this analysis, the answer is X" where X is your chosen letter."""
 
 # Decision Prompt
 
-vote_based = """Do not provide any further opinion. Only count the vote for a group solving a multiple choice question. When the same name appears multiple times, it refers to the same person. Considering only their last stated choice. Tally the votes for each option. Determine the most popular choice. If there's a tie, use your judgment to break it. Conclude with: "The final answer is X" where X is the most popular choice."""
+vote_based = """Do not provide any further opinion. Summarize which agents choose which answer finally. When the same name appears multiple times, it refers to the same person. Considering only their last stated choice. Tally the votes for each option. Determine the most popular choice. If there's a tie, use your judgment to break it. Conclude with: "The final answer is X" where X is the most popular choice."""
 
 moderator_decide = """You are the lead of a group solving a multiple choice question. Carefully review and summarize the key points from each agent's contribution. Identify areas of consensus and disagreement among the agents. Consider any potential biases or errors in the agents' reasoning. Make an informed decision based on the collective input. Conclude with: "The final answer is X" where X is your chosen letter."""
 

@@ -1,22 +1,22 @@
 role_2 = [
-   "engineer",
-   "economist"
+   "Engineer",
+   "Economist"
 ]
 
 role_4 = [
-   "engineer",
-   "economist",
-   "mathematician",
-   "medical doctor"
+   "Engineer",
+   "Economist",
+   "Mathematician",
+   "Medical Doctor"
 ]
 
 role_6 = [
-   "engineer",
-   "economist",
-   "mathematician",
-   "medical doctor",
-   "historian",
-   "philosopher"
+   "Engineer",
+   "Economist",
+   "Mathematician",
+   "Medical doctor",
+   "Historian",
+   "Philosopher"
 ]
 
 def get_roles(num_roles):
