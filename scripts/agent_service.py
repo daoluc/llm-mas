@@ -194,7 +194,7 @@ def run_group_architecture(message: str, ga:GroupArchitecture):
     else:
         roles = [ f"Debater {i}" for i in range(ga.group_size)]
         
-    prompts = prompt_store.get_agent_prompt(ga.prompt_type, ga.group_size)
+    prompts = prompt_store.get_agent_prompt(ga)
     decision_prompt = prompt_store.get_decision_prompt()
     
     if ga.topology == Topology.SINGLE:
@@ -214,14 +214,43 @@ def run_group_architecture(message: str, ga:GroupArchitecture):
         "prompt_tokens": prompt_tokens
     }
     
-# if __name__ == "__main__":
-#     from prompt_store import get_agent_prompt, get_decision_prompt
-#     from role_store import get_roles
-#     from group_architecture import PromptType
-#     from dotenv import load_dotenv
+if __name__ == "__main__":
+    from prompt_store import get_agent_prompt, get_decision_prompt
+    from role_store import get_roles
+    from group_architecture import PromptType
+    from dotenv import load_dotenv
+    import time
 
-#     # Load environment variables from .env file
-#     load_dotenv()
+    # Load environment variables from .env file
+    load_dotenv()
+    
+    # Example usage of run_group_architecture function
+    # Set up the parameters
+    message = "What is the capital of France? Options: A) London B) Berlin C) Paris D) Rome"
+    
+    # Create a GroupArchitecture instance
+    ga = GroupArchitecture(
+        topology=Topology.GROUP_CHAT,
+        group_size=2,
+        prompt_type=PromptType.MIXED,
+        assign_role=True,
+        malicious_target='A'
+    )
+
+    # Run the group architecture
+    start_time = time.time()
+    result = run_group_architecture(message, ga)
+    end_time = time.time()
+    runtime = end_time - start_time
+
+    print(f">>>{ga}")
+    print(f"Runtime: {runtime:.2f} seconds")
+    print(f"Completion tokens: {result['completion_tokens']}")
+    print(f"Prompt tokens: {result['prompt_tokens']}")
+
+    print("Group Architecture Results:")
+    for msg in result['messages']:
+        print(f"{msg['role']}: {msg['content']}")
     
     # # Set up the parameters
     # num_debaters = 2
