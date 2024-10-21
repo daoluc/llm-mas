@@ -2,6 +2,9 @@ from autogen import AssistantAgent, GroupChat, GroupChatManager
 import os
 import re
 from utils import calculate_tokens
+from openai import OpenAI
+
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def create_group_chat(num_debaters, roles, prompts, decision_prompt, debate_rounds=2):
     """

@@ -17,13 +17,15 @@ class GroupArchitecture:
         topology: Topology,
         group_size: int,
         prompt_type: PromptType,
+        assign_role: bool = True
     ):
         self.topology = topology
         self.group_size = group_size
         self.prompt_type = prompt_type        
+        self.assign_role = assign_role
 
     def __str__(self):
-        return f"A({self.topology.value}_{self.group_size}_{self.prompt_type.value})"
+        return f"A({self.topology.value}_{self.group_size}_{self.prompt_type.value}_{self.assign_role})"
 
     def __repr__(self):
         return self.__str__()
