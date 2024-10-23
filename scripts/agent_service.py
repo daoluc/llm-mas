@@ -3,6 +3,8 @@ from openai import OpenAI
 from group_architecture import GroupArchitecture, Topology
 import prompt_store
 import role_store
+import concurrent.futures
+import threading
 
 def run_single_agent(message, prompt):
     client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -96,8 +98,8 @@ def run_one_on_one(message, roles, prompts, decision_prompt):
     completion_tokens = 0
     prompt_tokens = 0
 
-    # Send message to each role independently
-    for role, prompt in zip(roles, prompts):
+    # Function to process a single role
+    def process_role(role, prompt):
         instruction = f"You are {role}. {prompt}"
         response = client.chat.completions.create(
             model=llm_model,
@@ -108,9 +110,21 @@ def run_one_on_one(message, roles, prompts, decision_prompt):
             temperature=1.0
         )
         new_message = response.choices[0].message.content
-        all_messages.append({"role": "user", "content": f"{role}: {new_message}"})
-        completion_tokens += response.usage.completion_tokens
-        prompt_tokens += response.usage.prompt_tokens
+        return {
+            "role": role,
+            "message": new_message,
+            "completion_tokens": response.usage.completion_tokens,
+            "prompt_tokens": response.usage.prompt_tokens
+        }
+
+    # Use ThreadPoolExecutor to process roles in parallel
+    with concurrent.futures.ThreadPoolExecutor(max_workers=len(roles)) as executor:
+        future_to_role = {executor.submit(process_role, role, prompt): role for role, prompt in zip(roles, prompts)}
+        for future in concurrent.futures.as_completed(future_to_role):
+            result = future.result()
+            all_messages.append({"role": "user", "content": f"{result['role']}: {result['message']}"})
+            completion_tokens += result['completion_tokens']
+            prompt_tokens += result['prompt_tokens']
     
     # Final decision
     instruction = f"You are the moderator. {decision_prompt}"
@@ -138,37 +152,38 @@ def run_reflection(message, roles, prompts, decision_prompt, debate_rounds=2):
     completion_tokens = 0
     prompt_tokens = 0
     
-
     # Group roles and prompts into pairs
     pairs = list(zip(roles[::2], roles[1::2], prompts[::2], prompts[1::2]))
     
-    for role1, role2, prompt1, prompt2 in pairs:
+    # Function to run a single pair debate
+    def run_pair_debate(role1, role2, prompt1, prompt2):
         pair_messages = [{"role": "user", "content": message}]
-        for _ in range(debate_rounds):                            
-            # First agent in the pair
-            instruction1 = f"You are {role1}. {prompt1}"
-            response1 = client.chat.completions.create(
-                model=llm_model,
-                messages=pair_messages + [{"role": "user", "content": instruction1}],
-                temperature=1.0
-            )
-            new_message1 = response1.choices[0].message.content
-            pair_messages.append({"role": "user", "content": f"{role1}: {new_message1}"})
-            completion_tokens += response1.usage.completion_tokens
-            prompt_tokens += response1.usage.prompt_tokens
+        pair_completion_tokens = 0
+        pair_prompt_tokens = 0
+        for _ in range(debate_rounds):
+            for role, prompt in [(role1, prompt1), (role2, prompt2)]:
+                instruction = f"You are {role}. {prompt}"
+                response = client.chat.completions.create(
+                    model=llm_model,
+                    messages=pair_messages + [{"role": "user", "content": instruction}],
+                    temperature=1.0
+                )
+                new_message = response.choices[0].message.content
+                pair_messages.append({"role": "user", "content": f"{role}: {new_message}"})
+                pair_completion_tokens += response.usage.completion_tokens
+                pair_prompt_tokens += response.usage.prompt_tokens
+        return pair_messages[1:], pair_completion_tokens, pair_prompt_tokens
 
-            # Second agent in the pair
-            instruction2 = f"You are {role2}. {prompt2}"
-            response2 = client.chat.completions.create(
-                model=llm_model,
-                messages=pair_messages + [{"role": "user", "content": instruction2}],
-                temperature=1.0
-            )
-            new_message2 = response2.choices[0].message.content
-            pair_messages.append({"role": "user", "content": f"{role2}: {new_message2}"})
-            completion_tokens += response2.usage.completion_tokens
-            prompt_tokens += response2.usage.prompt_tokens
-        all_messages += pair_messages[1:]
+    # Use ThreadPoolExecutor to run pair debates in parallel
+    with concurrent.futures.ThreadPoolExecutor(max_workers=len(pairs)) as executor:
+        futures = [executor.submit(run_pair_debate, *pair) for pair in pairs]
+        results = [future.result() for future in concurrent.futures.as_completed(futures)]
+
+    # Aggregate results
+    for pair_messages, pair_completion_tokens, pair_prompt_tokens in results:
+        all_messages.extend(pair_messages)
+        completion_tokens += pair_completion_tokens
+        prompt_tokens += pair_prompt_tokens
 
     # Final decision
     instruction = f"You are the moderator. {decision_prompt}"
@@ -233,94 +248,3 @@ def run_group_architecture(message: str, ga:GroupArchitecture):
 #         topology=Topology.GROUP_CHAT,
 #         group_size=2,
 #         prompt_type=PromptType.MIXED,
-#         assign_role=True,
-#         malicious_target='A'
-#     )
-
-#     # Run the group architecture
-#     start_time = time.time()
-#     result = run_group_architecture(message, ga)
-#     end_time = time.time()
-#     runtime = end_time - start_time
-
-#     print(f">>>{ga}")
-#     print(f"Runtime: {runtime:.2f} seconds")
-#     print(f"Completion tokens: {result['completion_tokens']}")
-#     print(f"Prompt tokens: {result['prompt_tokens']}")
-
-#     print("Group Architecture Results:")
-#     for msg in result['messages']:
-#         print(f"{msg['role']}: {msg['content']}")
-    
-    # # Set up the parameters
-    # num_debaters = 2
-    # roles = get_roles(num_debaters)
-    # prompts = get_agent_prompt(PromptType.CHAIN_OF_THOUGHT, num_debaters)
-    # decision_prompt = get_decision_prompt()
-    # message = "What is the capital of France? A) London B) Berlin C) Paris D) Rome"
-
-    # # Run the group chat
-    # start_time = time.time()
-    # result, completion_tokens, prompt_tokens = run_groupchat(num_debaters, roles, prompts, decision_prompt, message)
-    # end_time = time.time()
-    # runtime = end_time - start_time
-    # print(f"Runtime: {runtime:.2f} seconds")
-
-    # # Print completion and prompt tokens
-    # print(f"Completion tokens: {completion_tokens}")
-    # print(f"Prompt tokens: {prompt_tokens}")
-
-    # # Print the results
-    # if result:
-    #     print("Group Chat Results:")
-    #     for msg in result:
-    #         print(f"{msg['content']}")
-    # else:
-    #     print("An error occurred during the group chat.")
-    
-    # # Example usage of run_single_agent function    
-    # # Set up the parameters
-    # message = "What is the capital of France? A) London B) Berlin C) Paris D) Rome"
-    # prompt = get_agent_prompt(PromptType.CHAIN_OF_THOUGHT, 1)[0]
-
-    # # Run the single agent
-    # start_time = time.time()
-    # result, completion_tokens, prompt_tokens  = run_single_agent(message, prompt)
-    # end_time = time.time()
-    # runtime = end_time - start_time
-    
-    # print(result)
-    # print(completion_tokens)
-    # print(prompt_tokens)
-    
-    # # Example usage of run_one_on_one function
-    # # Set up the parameters
-    # message = "What is the capital of France? A) London B) Berlin C) Paris D) Rome"
-    # prompt = get_agent_prompt(PromptType.CHAIN_OF_THOUGHT, 2)
-
-    # # Run the single agent
-    # start_time = time.time()
-    # result, completion_tokens, prompt_tokens  = run_one_on_one(message, get_roles(2), get_agent_prompt(PromptType.CHAIN_OF_THOUGHT, 2), get_decision_prompt())
-    # end_time = time.time()
-    # runtime = end_time - start_time
-    
-    # print(result)
-    # print(completion_tokens)
-    # print(prompt_tokens)
-    
-    # # Example usage of run_reflection function
-    # # Set up the parameters
-    # message = "What is the capital of France? A) London B) Berlin C) Paris D) Rome"
-    # initial_prompt = get_agent_prompt(PromptType.CHAIN_OF_THOUGHT, 4)   
-
-    # # Run the reflection
-    # start_time = time.time()
-    # result, completion_tokens, prompt_tokens = run_reflection(message, get_roles(4), get_agent_prompt(PromptType.MIXED, 4), get_decision_prompt())
-    # end_time = time.time()
-    # runtime = end_time - start_time
-
-    # print("Reflection Results:")
-    # print(result)
-    # print(f"Completion tokens: {completion_tokens}")
-    # print(f"Prompt tokens: {prompt_tokens}")
-    # print(f"Runtime: {runtime:.2f} seconds")
