@@ -9,28 +9,28 @@ import threading
 def run_single_agent(message, prompt):
     client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
     llm_model = os.getenv("LLM_MODEL")
+    temperature = float(os.getenv("TEMPERATURE"))
 
-    messages = [
-        {"role": "system", "content": prompt},
-        {"role": "user", "content": message}
+    messages = [        
+        {'role': 'user', 'content': message},
+        {'role': 'user', 'content': prompt}
     ]
 
     response = client.chat.completions.create(
         model=llm_model,
         messages=messages,
-        temperature=1.0
+        temperature=temperature
     )
     
     completion_tokens = response.usage.completion_tokens
     prompt_tokens = response.usage.prompt_tokens
 
-    return [{'content': response.choices[0].message.content}], completion_tokens, prompt_tokens
+    return [{'role': 'user', 'content': message},{'role': 'user', 'content': response.choices[0].message.content}], completion_tokens, prompt_tokens
 
 def run_groupchat(message, roles, prompts, decision_prompt, debate_rounds=2):    
     client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-
-    # Set up OpenAI API key
     llm_model = os.getenv("LLM_MODEL")
+    temperature = float(os.getenv("TEMPERATURE"))
 
     if len(roles) != len(prompts):
         raise ValueError(f"Number of roles ({len(roles)}) does not match the number of prompts ({len(prompts)})")
@@ -52,7 +52,7 @@ def run_groupchat(message, roles, prompts, decision_prompt, debate_rounds=2):
         response = client.chat.completions.create(
             model=llm_model,
             messages=messages + [{"role": "user", "content": instruction}],
-            temperature=1.0
+            temperature=temperature
         )
         # Extract and return the response
         new_message = response.choices[0].message.content
@@ -65,7 +65,7 @@ def run_groupchat(message, roles, prompts, decision_prompt, debate_rounds=2):
     response = client.chat.completions.create(
         model=llm_model,
         messages=messages + [{"role": "user", "content": instruction}],
-        temperature=1.0
+        temperature=temperature
     )
     new_message = response.choices[0].message.content
     messages.append({"role": "user", "content": f"Moderator: {new_message}"})
@@ -90,6 +90,7 @@ def run_one_on_one(message, roles, prompts, decision_prompt):
     """
     client = OpenAI()
     llm_model = os.getenv("LLM_MODEL")
+    temperature = float(os.getenv("TEMPERATURE"))
     
     if len(roles) != len(prompts):
         raise ValueError("Number of roles must match the number of prompts.")
@@ -107,7 +108,7 @@ def run_one_on_one(message, roles, prompts, decision_prompt):
                 {"role": "user", "content": message},
                 {"role": "user", "content": instruction}
             ],
-            temperature=1.0
+            temperature=temperature
         )
         new_message = response.choices[0].message.content
         return {
@@ -131,7 +132,7 @@ def run_one_on_one(message, roles, prompts, decision_prompt):
     response = client.chat.completions.create(
         model=llm_model,
         messages=all_messages + [{"role": "user", "content": instruction}],
-        temperature=1.0
+        temperature=temperature
     )
     final_decision = response.choices[0].message.content
     all_messages.append({"role": "user", "content": f"Moderator: {final_decision}"})
@@ -144,6 +145,7 @@ def run_one_on_one(message, roles, prompts, decision_prompt):
 def run_reflection(message, roles, prompts, decision_prompt, debate_rounds=2):
     client = OpenAI()
     llm_model = os.getenv("LLM_MODEL")
+    temperature = float(os.getenv("TEMPERATURE"))
     
     if len(roles) != len(prompts) or len(roles) % 2 != 0:
         raise ValueError("Number of roles must match the number of prompts and be even.")
@@ -166,7 +168,7 @@ def run_reflection(message, roles, prompts, decision_prompt, debate_rounds=2):
                 response = client.chat.completions.create(
                     model=llm_model,
                     messages=pair_messages + [{"role": "user", "content": instruction}],
-                    temperature=1.0
+                    temperature=temperature
                 )
                 new_message = response.choices[0].message.content
                 pair_messages.append({"role": "user", "content": f"{role}: {new_message}"})
@@ -190,7 +192,7 @@ def run_reflection(message, roles, prompts, decision_prompt, debate_rounds=2):
     response = client.chat.completions.create(
         model=llm_model,
         messages=all_messages + [{"role": "user", "content": instruction}],
-        temperature=1.0
+        temperature=temperature
     )
     final_decision = response.choices[0].message.content
     all_messages.append({"role": "user", "content": f"Moderator: {final_decision}"})

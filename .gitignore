@@ -1,6 +1,6 @@
 # project specific
 *.db
-archive/
+archive*/
 results/messages.txt
 results/result_per_question.csv
 

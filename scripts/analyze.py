@@ -32,7 +32,7 @@ def compare_architectures(result_filepath: str, arch1: str, arch2: str, datetime
     
     # Apply datetime filter if provided
     if datetime_filter:
-        df = df[df['current_datetime'] == datetime_filter]
+        df = df[df['datetime'] == datetime_filter]
     
     # Filter the DataFrame for each architecture
     df1 = df[df['architecture'] == arch1]
@@ -49,9 +49,9 @@ def compare_architectures(result_filepath: str, arch1: str, arch2: str, datetime
 
 # Example usage:
 file_path = 'results/result_per_question.csv'
-arch1 = 'A(gc_2_cot)'
-arch2 = 'A(one_1_cot)'
-datetime_filter = '2024-10-20 01:54:35'
+arch1 = 'A(gc_2_cot_True_True)'
+arch2 = 'A(gc_2_cot_True_False)'
+datetime_filter = '2024-10-25 13:39:23'
 different_questions = compare_architectures(file_path, arch1, arch2, datetime_filter)
 for question_id, question in different_questions:
     print(f"Question ID: {question_id}")
