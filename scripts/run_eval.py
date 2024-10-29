@@ -191,7 +191,7 @@ def main():
         
     dataset = load_truthfulqa_mc1()
     print(type(dataset))
-    dataset = dataset.select(random.sample(range(len(dataset)), 10))
+    dataset = dataset.select(random.sample(range(len(dataset)), 100))
     dataset = prepare_dataset(dataset)
     n_threads = 12    
     

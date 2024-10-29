@@ -46,7 +46,7 @@ def run_groupchat(message, roles, prompts, decision_prompt, debate_rounds=2):
     # debate rounds        
     for i in range(len(roles)*debate_rounds):
         cur = i % len(roles)                        
-        instruction = f"You are {roles[cur]}. {prompts[cur]}"
+        instruction = f"You are {roles[cur]} agent. {prompts[cur]}"
 
         # Send the request to the OpenAI API        
         response = client.chat.completions.create(
@@ -56,7 +56,7 @@ def run_groupchat(message, roles, prompts, decision_prompt, debate_rounds=2):
         )
         # Extract and return the response
         new_message = response.choices[0].message.content
-        messages.append({"role": "user", "content": f"{roles[cur]}: {new_message}"})    
+        messages.append({"role": "user", "content": f"Response from {roles[cur]} agent: {new_message}"})    
         completion_tokens += response.usage.completion_tokens
         prompt_tokens += response.usage.prompt_tokens
 
@@ -101,7 +101,7 @@ def run_one_on_one(message, roles, prompts, decision_prompt):
 
     # Function to process a single role
     def process_role(role, prompt):
-        instruction = f"You are {role}. {prompt}"
+        instruction = f"You are {role} agent. {prompt}"
         response = client.chat.completions.create(
             model=llm_model,
             messages=[
@@ -123,7 +123,7 @@ def run_one_on_one(message, roles, prompts, decision_prompt):
         future_to_role = {executor.submit(process_role, role, prompt): role for role, prompt in zip(roles, prompts)}
         for future in concurrent.futures.as_completed(future_to_role):
             result = future.result()
-            all_messages.append({"role": "user", "content": f"{result['role']}: {result['message']}"})
+            all_messages.append({"role": "user", "content": f"Response from {result['role']} agent: {result['message']}"})
             completion_tokens += result['completion_tokens']
             prompt_tokens += result['prompt_tokens']
     
@@ -164,14 +164,14 @@ def run_reflection(message, roles, prompts, decision_prompt, debate_rounds=2):
         pair_prompt_tokens = 0
         for _ in range(debate_rounds):
             for role, prompt in [(role1, prompt1), (role2, prompt2)]:
-                instruction = f"You are {role}. {prompt}"
+                instruction = f"You are {role} agent. {prompt}"
                 response = client.chat.completions.create(
                     model=llm_model,
                     messages=pair_messages + [{"role": "user", "content": instruction}],
                     temperature=temperature
                 )
                 new_message = response.choices[0].message.content
-                pair_messages.append({"role": "user", "content": f"{role}: {new_message}"})
+                pair_messages.append({"role": "user", "content": f"Response from {role} agent: {new_message}"})
                 pair_completion_tokens += response.usage.completion_tokens
                 pair_prompt_tokens += response.usage.prompt_tokens
         return pair_messages[1:], pair_completion_tokens, pair_prompt_tokens

@@ -48,10 +48,10 @@ def compare_architectures(result_filepath: str, arch1: str, arch2: str, datetime
     return list(zip(diff_questions['question_id'], diff_questions['question_1']))
 
 # Example usage:
-file_path = 'results/result_per_question.csv'
-arch1 = 'A(gc_2_cot_True_True)'
-arch2 = 'A(gc_2_cot_True_False)'
-datetime_filter = '2024-10-25 13:39:23'
+file_path = 'archiveOct26/result_per_question.csv'
+arch1 = 'A(1on1_4_mix_True_False)'
+arch2 = 'A(one_1_cot_True_False)'
+datetime_filter = None #'2024-10-25 13:39:23'
 different_questions = compare_architectures(file_path, arch1, arch2, datetime_filter)
 for question_id, question in different_questions:
     print(f"Question ID: {question_id}")

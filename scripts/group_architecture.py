@@ -17,7 +17,7 @@ class GroupArchitecture:
         topology: Topology,
         group_size: int,
         prompt_type: PromptType,
-        assign_role: bool = True,
+        assign_role: bool = False,
         malicious_target: str = None,
     ):
         self.topology = topology
