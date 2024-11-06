@@ -1,19 +1,19 @@
 role_2 = [
-   "Engineer",
+   "Mathematician",
    "Economist"
 ]
 
 role_4 = [
-   "Engineer",
-   "Economist",
    "Mathematician",
+   "Economist",
+   "Engineer",
    "Medical Doctor"
 ]
 
 role_6 = [
-   "Engineer",
-   "Economist",
    "Mathematician",
+   "Economist",
+   "Engineer",
    "Medical doctor",
    "Historian",
    "Philosopher"
