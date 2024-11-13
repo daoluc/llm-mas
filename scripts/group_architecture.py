@@ -5,6 +5,7 @@ class Topology(Enum):
     GROUP_CHAT = "gc"
     ONE_ON_ONE = "1on1"
     REFLECTION = "rfl"
+    BLACKBOARD = "bb"
 
 class PromptType(Enum):
     CHAIN_OF_THOUGHT = "cot"

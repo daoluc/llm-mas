@@ -201,6 +201,78 @@ def run_reflection(message, roles, prompts, decision_prompt, debate_rounds=2):
     
     return all_messages, completion_tokens, prompt_tokens
 
+def run_blackboard(message, roles, prompts, decision_prompt, debate_rounds=2):
+    """
+    Run a blackboard architecture where agents first answer independently in parallel,
+    then debate based on all collected answers.
+    
+    Args:
+    message (str): The input message to be processed
+    roles (list): List of role names for the agents
+    prompts (list): List of prompts corresponding to each role
+    decision_prompt (str): The prompt for the final decision
+    debate_rounds (int): Number of debate rounds after initial answers
+    
+    Returns:
+    tuple: (messages, completion_tokens, prompt_tokens)
+    """
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    llm_model = os.getenv("LLM_MODEL")
+    temperature = float(os.getenv("TEMPERATURE"))
+
+    if len(roles) != len(prompts):
+        raise ValueError(f"Number of roles ({len(roles)}) does not match the number of prompts ({len(prompts)})")
+
+    completion_tokens = 0
+    prompt_tokens = 0
+    
+    # Initialize messages with the input
+    messages = [{"role": "user", "content": message}]
+    
+    # Function to get response from a single agent given current context
+    def get_agent_response(role, prompt, current_messages):
+        instruction = f"You are {role} agent. {prompt}"
+        response = client.chat.completions.create(
+            model=llm_model,
+            messages=current_messages + [{"role": "user", "content": instruction}],
+            temperature=temperature
+        )
+        return {
+            "message": {"role": "user", "content": f"Response from {role} agent: {response.choices[0].message.content}"},
+            "completion_tokens": response.usage.completion_tokens,
+            "prompt_tokens": response.usage.prompt_tokens
+        }
+
+    # Initial round and debate rounds
+    for round_num in range(debate_rounds):
+        # Get responses in parallel for this round
+        with concurrent.futures.ThreadPoolExecutor(max_workers=len(roles)) as executor:
+            future_responses = [executor.submit(get_agent_response, role, prompt, messages.copy()) 
+                              for role, prompt in zip(roles, prompts)]
+            round_responses = [future.result() for future in concurrent.futures.as_completed(future_responses)]
+
+        # Collect all responses from this round
+        for response in round_responses:
+            messages.append(response["message"])
+            completion_tokens += response["completion_tokens"]
+            prompt_tokens += response["prompt_tokens"]
+            # new_prompt_tokens = response["prompt_tokens"]
+            # print(f"New prompt tokens {new_prompt_tokens}")
+
+    # Final decision by moderator
+    instruction = f"You are the moderator. {decision_prompt}"
+    response = client.chat.completions.create(
+        model=llm_model,
+        messages=messages + [{"role": "user", "content": instruction}],
+        temperature=temperature
+    )
+    final_decision = response.choices[0].message.content
+    messages.append({"role": "user", "content": f"Moderator: {final_decision}"})
+    completion_tokens += response.usage.completion_tokens
+    prompt_tokens += response.usage.prompt_tokens
+
+    return messages, completion_tokens, prompt_tokens
+
 
 
 def run_group_architecture(message: str, ga:GroupArchitecture):
@@ -222,6 +294,8 @@ def run_group_architecture(message: str, ga:GroupArchitecture):
         all_messages, completion_token, prompt_tokens = run_one_on_one(message, roles, prompts, decision_prompt)
     elif ga.topology == Topology.REFLECTION:
         all_messages, completion_token, prompt_tokens = run_reflection(message, roles, prompts, decision_prompt)
+    elif ga.topology == Topology.BLACKBOARD:
+        all_messages, completion_token, prompt_tokens = run_blackboard(message, roles, prompts, decision_prompt)
     else:
         raise ValueError(f"Unsupported topology: {ga.topology}")
 
