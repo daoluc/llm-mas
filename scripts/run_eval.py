@@ -191,9 +191,9 @@ def main():
         
     dataset = load_truthfulqa_mc1()
     print(type(dataset))
-    dataset = dataset.select(random.sample(range(len(dataset)), 100))
+    dataset = dataset.select(random.sample(range(len(dataset)), 10))
     dataset = prepare_dataset(dataset)
-    n_threads = 12    
+    n_threads = 8    
     
     # return True
     
@@ -206,28 +206,39 @@ def main():
     # accuracy = run_evaluation(ga, dataset, current_datetime, n_threads=n_threads)
     # print(f"Accuracy: {accuracy:.2%}")    
     # print(f"Results saved to results/results.csv and results/result_per_question.csv")
+
+    # ga = GroupArchitecture(Topology.GROUP_CHAT, 2, PromptType.STEP_BACK_ABSTRACTION)
+    # accuracy = run_evaluation(ga, dataset, current_datetime, n_threads=n_threads)
+    # print(f"Accuracy: {accuracy:.2%}")    
+    # print(f"Results saved to results/results.csv and results/result_per_question.csv")
+    
+    # ga = GroupArchitecture(Topology.GROUP_CHAT, 2, PromptType.MIXED)
+    # accuracy = run_evaluation(ga, dataset, current_datetime, n_threads=n_threads)
+    # print(f"Accuracy: {accuracy:.2%}")    
+    # print(f"Results saved to results/results.csv and results/result_per_question.csv")
+
     
     # ga = GroupArchitecture(Topology.GROUP_CHAT, 2, PromptType.MIXED)
     # accuracy = run_evaluation(ga, dataset, current_datetime, n_threads=n_threads)
     # print(f"Accuracy: {accuracy:.2%}")    
     # print(f"Results saved to results/results.csv and results/result_per_question.csv")
     
-    ga = GroupArchitecture(Topology.GROUP_CHAT, 4, PromptType.MIXED)
-    accuracy = run_evaluation(ga, dataset, current_datetime, n_threads=n_threads)
-    print(f"Accuracy: {accuracy:.2%}")    
-    print(f"Results saved to results/results.csv and results/result_per_question.csv")
-    
-    ga = GroupArchitecture(Topology.ONE_ON_ONE, 4, PromptType.MIXED)
+    ga = GroupArchitecture(Topology.CROWDSOURCING, 4, PromptType.CHAIN_OF_THOUGHT)
     accuracy = run_evaluation(ga, dataset, current_datetime, n_threads=n_threads//ga.group_size)
     print(f"Accuracy: {accuracy:.2%}")    
     print(f"Results saved to results/results.csv and results/result_per_question.csv")
     
-    ga = GroupArchitecture(Topology.REFLECTION, 4, PromptType.MIXED)
+    ga = GroupArchitecture(Topology.GROUP_CHAT, 4, PromptType.CHAIN_OF_THOUGHT)
+    accuracy = run_evaluation(ga, dataset, current_datetime, n_threads=n_threads)
+    print(f"Accuracy: {accuracy:.2%}")    
+    print(f"Results saved to results/results.csv and results/result_per_question.csv")
+    
+    ga = GroupArchitecture(Topology.REFLECTION, 4, PromptType.CHAIN_OF_THOUGHT)
     accuracy = run_evaluation(ga, dataset, current_datetime, n_threads=n_threads//ga.group_size*2)
     print(f"Accuracy: {accuracy:.2%}")    
     print(f"Results saved to results/results.csv and results/result_per_question.csv")
     
-    ga = GroupArchitecture(Topology.BLACKBOARD, 4, PromptType.MIXED)
+    ga = GroupArchitecture(Topology.BLACKBOARD, 4, PromptType.CHAIN_OF_THOUGHT)
     accuracy = run_evaluation(ga, dataset, current_datetime, n_threads=n_threads//ga.group_size)
     print(f"Accuracy: {accuracy:.2%}")    
     print(f"Results saved to results/results.csv and results/result_per_question.csv")
@@ -242,25 +253,25 @@ def main():
     # print(f"Accuracy: {accuracy:.2%}")    
     # print(f"Results saved to results/results.csv and results/result_per_question.csv")
     
-    ga = GroupArchitecture(Topology.GROUP_CHAT, 4, PromptType.MIXED, malicious_target='Y')
-    accuracy = run_evaluation(ga, dataset, current_datetime, n_threads=n_threads)
-    print(f"Accuracy: {accuracy:.2%}")    
-    print(f"Results saved to results/results.csv and results/result_per_question.csv")
+    # ga = GroupArchitecture(Topology.CROWDSOURCING, 4, PromptType.MIXED, malicious_target='Y')
+    # accuracy = run_evaluation(ga, dataset, current_datetime, n_threads=n_threads//ga.group_size)
+    # print(f"Accuracy: {accuracy:.2%}")    
+    # print(f"Results saved to results/results.csv and results/result_per_question.csv")
     
-    ga = GroupArchitecture(Topology.ONE_ON_ONE, 4, PromptType.MIXED, malicious_target='Y')
-    accuracy = run_evaluation(ga, dataset, current_datetime, n_threads=n_threads//ga.group_size)
-    print(f"Accuracy: {accuracy:.2%}")    
-    print(f"Results saved to results/results.csv and results/result_per_question.csv")
+    # ga = GroupArchitecture(Topology.GROUP_CHAT, 4, PromptType.MIXED, malicious_target='Y')
+    # accuracy = run_evaluation(ga, dataset, current_datetime, n_threads=n_threads)
+    # print(f"Accuracy: {accuracy:.2%}")    
+    # print(f"Results saved to results/results.csv and results/result_per_question.csv")
     
-    ga = GroupArchitecture(Topology.REFLECTION, 4, PromptType.MIXED, malicious_target='Y')
-    accuracy = run_evaluation(ga, dataset, current_datetime, n_threads=n_threads//ga.group_size*2)
-    print(f"Accuracy: {accuracy:.2%}")    
-    print(f"Results saved to results/results.csv and results/result_per_question.csv")
+    # ga = GroupArchitecture(Topology.REFLECTION, 4, PromptType.MIXED, malicious_target='Y')
+    # accuracy = run_evaluation(ga, dataset, current_datetime, n_threads=n_threads//ga.group_size*2)
+    # print(f"Accuracy: {accuracy:.2%}")    
+    # print(f"Results saved to results/results.csv and results/result_per_question.csv")
     
-    ga = GroupArchitecture(Topology.BLACKBOARD, 4, PromptType.MIXED, malicious_target='Y')
-    accuracy = run_evaluation(ga, dataset, current_datetime, n_threads=n_threads//ga.group_size)
-    print(f"Accuracy: {accuracy:.2%}")    
-    print(f"Results saved to results/results.csv and results/result_per_question.csv")
+    # ga = GroupArchitecture(Topology.BLACKBOARD, 4, PromptType.MIXED, malicious_target='Y')
+    # accuracy = run_evaluation(ga, dataset, current_datetime, n_threads=n_threads//ga.group_size)
+    # print(f"Accuracy: {accuracy:.2%}")    
+    # print(f"Results saved to results/results.csv and results/result_per_question.csv")
 
 if __name__ == "__main__":
     main()

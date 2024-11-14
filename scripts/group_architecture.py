@@ -3,7 +3,7 @@ from enum import Enum
 class Topology(Enum):
     SINGLE     = "one"
     GROUP_CHAT = "gc"
-    ONE_ON_ONE = "1on1"
+    CROWDSOURCING = "cs"
     REFLECTION = "rfl"
     BLACKBOARD = "bb"
 

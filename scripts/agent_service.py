@@ -75,7 +75,7 @@ def run_groupchat(message, roles, prompts, decision_prompt, debate_rounds=2):
 
     return messages, completion_tokens, prompt_tokens
 
-def run_one_on_one(message, roles, prompts, decision_prompt):
+def run_crowdsourcing(message, roles, prompts, decision_prompt):
     """
     Run a one-on-one conversation where the input message is sent to each role independently.
     
@@ -290,8 +290,8 @@ def run_group_architecture(message: str, ga:GroupArchitecture):
         all_messages, completion_token, prompt_tokens = run_single_agent(message, prompts[0])
     elif ga.topology == Topology.GROUP_CHAT:
         all_messages, completion_token, prompt_tokens = run_groupchat(message, roles, prompts, decision_prompt)
-    elif ga.topology == Topology.ONE_ON_ONE:
-        all_messages, completion_token, prompt_tokens = run_one_on_one(message, roles, prompts, decision_prompt)
+    elif ga.topology == Topology.CROWDSOURCING:
+        all_messages, completion_token, prompt_tokens = run_crowdsourcing(message, roles, prompts, decision_prompt)
     elif ga.topology == Topology.REFLECTION:
         all_messages, completion_token, prompt_tokens = run_reflection(message, roles, prompts, decision_prompt)
     elif ga.topology == Topology.BLACKBOARD:
