@@ -28,7 +28,7 @@ class GroupArchitecture:
         self.malicious_target = malicious_target
 
     def __str__(self):
-        return f"A({self.topology.value}_{self.group_size}_{self.prompt_type.value}_{self.assign_role}_{self.malicious_target!=None})"
+        return f"{self.topology.value}_{self.group_size}_{self.prompt_type.value}_{self.assign_role}_{self.malicious_target!=None}"
 
     def __repr__(self):
         return self.__str__()
