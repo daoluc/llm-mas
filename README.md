@@ -1,22 +1,33 @@
-# LLM-based Multi Agent System
+# Designing LLM-based Multi Agent System for Resilience
 
+This repo provides a framework to simulate various agent collaboration schemas including crowdsourcing, group chat, reflection, and blackboard with the presence of malicious agents.
 
-## Running the FastAPI Server
+## Experiment Results with TruthfulQA
 
-To run the FastAPI server:
+![Experiemential Result](results.png)
+
+## Usage
+
+### Environment Setup
 
 ```bash
-fastapi run agent_service.py
+python -m venv venv
+source venv/bin/activate # On Windows, use: venv\Scripts\activate
+pip install -r requirements.txt
 ```
 
-To update requirements:
+### Setup local variables
+
+Create .env file as follows
 
 ```bash
-pipreqs --force .
+OPENAI_API_KEY=<YOUR_API_KEY>
+LLM_MODEL=gpt-4o-mini-2024-07-18
+TEMPERATURE=1
 ```
 
-To run local agent api:
+### Run agent collaboration framework
 
 ```bash
-uvicorn agent_service:app --host 0.0.0.0 --port 8000 --workers 5
+python scripts/run_eval.py
 ```
